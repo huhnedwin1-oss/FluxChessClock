@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Seesaw Chess Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="liquid-bg"></div>
+
+    <div id="menu-overlay">
+        
+        <div id="intro-lottie"></div>
+
+        <div class="grid" id="preset-grid">
+            <button class="preset-btn" data-time="1" data-inc="0">1 | 0</button>
+            <button class="preset-btn" data-time="2" data-inc="1">2 | 1</button>
+            <button class="preset-btn" data-time="3" data-inc="0">3 | 0</button>
+            <button class="preset-btn" data-time="3" data-inc="2">3 | 2</button>
+            <button class="preset-btn" data-time="5" data-inc="0">5 | 0</button>
+            <button class="preset-btn" data-time="5" data-inc="3">5 | 3</button>
+            <button class="preset-btn" data-time="10" data-inc="0">10 | 0</button>
+            <button class="preset-btn" data-time="15" data-inc="10">15 | 10</button>
+            <button class="preset-btn" id="customBtn">Custom</button>
+        </div>
+
+        <div id="custom-modal" style="display: none;">
+            <div class="custom-content">
+                <div class="input-group">
+                    <label>Time (min)</label>
+                    <div class="inputs-wrapper">
+                        <input type="number" id="custom-time-1" class="p1-input" value="5" min="1">
+                        <input type="number" id="custom-time-2" class="p2-input" value="5" min="1" style="display: none;">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Increment (sec)</label>
+                    <div class="inputs-wrapper">
+                        <input type="number" id="custom-inc-1" class="p1-input" value="0" min="0">
+                        <input type="number" id="custom-inc-2" class="p2-input" value="0" min="0" style="display: none;">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Delay (sec)</label>
+                    <div class="inputs-wrapper">
+                        <input type="number" id="custom-delay-1" class="p1-input" value="0" min="0">
+                        <input type="number" id="custom-delay-2" class="p2-input" value="0" min="0" style="display: none;">
+                    </div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label for="asym-toggle">Asymmetrical</label>
+                    <input type="checkbox" id="asym-toggle">
+                </div>
+
+                <div class="modal-buttons">
+                    <button id="custom-back-btn">Back</button>
+                    <button id="custom-start-btn">Start</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="clock-container">
+        <div id="player2" class="clock-side">00:00</div>
+
+        <div id="center-controls" style="display: none;">
+            <div id="btn-lottie"></div>
+            
+            <button id="playBtn" class="invisible-hitbox"></button>
+            <button id="pauseBtn" class="invisible-hitbox"></button>
+            <button id="stopBtn" class="invisible-hitbox"></button>
+        </div>
+
+        <div id="player1" class="clock-side active">00:00</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

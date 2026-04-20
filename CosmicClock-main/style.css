@@ -1,0 +1,317 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@800&family=Roboto+Mono:wght@700&display=swap');
+
+body, html { 
+    margin: 0; 
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+    background-color: #000000;
+}
+
+
+/* 🟢 THE LOTTIE BACKGROUND LAYER */
+#liquid-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none; /* Crucial: Lets taps pass through to the buttons */
+    /* Ensure the flip happens instantly with no transition delay */
+    transition: transform 0s; 
+}
+
+/* Add this new flipped state! */
+#liquid-bg.flipped {
+    transform: rotate(180deg);
+}
+
+#clock-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 5; /* Brings the whole clock UI in front of the liquid */
+}
+
+
+.clock-side { 
+    flex: 1; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 22vw; 
+    font-family: 'Roboto Mono', monospace; 
+    text-align: center; 
+    line-height: 1;
+    width: 100%;
+    text-shadow: none; /* Removed the shadow for a cleaner, modern look against the orange */
+    padding-top: 10vh; 
+    
+    /* 🟢 THE INACTIVE STATE (Black Text) */
+    color: #000000; 
+    opacity: 0.7; /* Optional: drops the opacity slightly so it blends into the orange gel */
+    
+    /* 🟢 THE TIMING (Adjust '0.4s' to perfectly match how fast your gel splashes over!) */
+    transition: color 0.4s ease-out, opacity 0.4s ease-out; 
+    background: transparent; 
+}
+
+.active { 
+    /* 🟢 THE ACTIVE STATE (White Text) */
+    color: #ffffff; 
+    opacity: 1; 
+}
+
+#player2 { 
+    transform: rotate(180deg); 
+    /* 🟢 Removed the line cutting the screen in half */
+    border-bottom: none; 
+}
+
+#center-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+}
+
+#btn-lottie {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.invisible-hitbox {
+    position: absolute;
+    top: 50%; 
+    border: none;
+    width: 80px; /* Or whatever custom size you ended up using! */
+    height: 80px;
+    cursor: pointer;
+    z-index: 10;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* 🟢 The red background line is completely gone! */
+    background: transparent; 
+}
+
+/* Pause button stays exactly in the center */
+#pauseBtn { 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+}
+
+/* Play and Stop start from the center, then get pushed outward */
+/* Tweak the "150px" to match how far they slide in your animation */
+#stopBtn { 
+    left: 50%; 
+    transform: translate(-115px, -50%); 
+    display: none; 
+}
+#playBtn { 
+    left: 50%; 
+    transform: translate(50px, -50%); 
+    display: none; 
+}
+#menu-overlay { 
+    position: fixed; inset: 0; 
+    background: #111; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column; 
+    z-index: 30;
+    padding: 20px;
+}
+
+/* 🟢 Positions the Lottie perfectly behind the buttons */
+#intro-lottie {
+    position: absolute; 
+    inset: 0; 
+    z-index: 1; 
+    pointer-events: none; /* Crucial: Lets you tap the buttons! */
+    width: 100%;
+    height: 100%;
+}
+
+/* 🟢 Kills all vertical and horizontal scrolling across the entire app */
+body, html { 
+    margin: 0; 
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; 
+    background-color: #000000;
+}
+
+/* 🟢 Starts hidden, centered, and waits for JS to calculate the scale */
+#preset-grid {
+    position: absolute; /* Changed to absolute so it floats perfectly in the center */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transform-origin: center center;
+    
+    z-index: 2;
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity 0.5s ease-out; 
+}
+
+#preset-grid.visible {
+    opacity: 1 !important; 
+    pointer-events: auto !important; 
+}
+
+/* 🟢 Your EXACT After Effects Layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 300px); /* Exact AE width */
+    gap: 40px; /* Exact AE padding */
+    width: max-content; 
+}
+
+/* 🟢 Your EXACT After Effects Box Specs */
+.preset-btn {
+    width: 300px;
+    height: 260px;
+    background: #222222;
+    color: #ffffff;
+    border-radius: 40px; /* AE Roundness */
+    
+    box-sizing: border-box;
+    border: 10px solid #FB7F33; /* AE Inside Stroke */
+    
+    padding: 0; 
+    font-size: 3rem; 
+    font-family: 'Kanit', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    transition: all 0.1s ease-out; 
+}
+
+.preset-btn:active {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    transform: scale(0.95);
+}
+/* 🟢 CUSTOM GAME POP-UP MENU */
+#custom-modal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(17, 17, 17, 0.95); /* Dark transparent blur over the grid */
+    z-index: 40;
+}
+
+.custom-content {
+    background: #222;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 30px;
+    width: 80%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Kanit', sans-serif;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.9);
+}
+
+.input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input-group label {
+    font-size: 1.2rem;
+    color: #aaa;
+}
+
+.input-group input {
+    width: 70px;
+    background: #111;
+    border: 2px solid #333;
+    color: white;
+    font-size: 1.5rem;
+    font-family: 'Roboto Mono', monospace;
+    text-align: center;
+    border-radius: 8px;
+    padding: 5px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #777;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    background: #111;
+    color: white;
+    border: 2px solid #333;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-family: 'Kanit', sans-serif;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.modal-buttons button:active {
+    background: #fff;
+    color: #000;
+    transform: scale(0.95);
+}
+
+.inputs-wrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.checkbox-group label {
+    font-size: 1.2rem;
+    color: #aaa;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    accent-color: white;
+    cursor: pointer;
+}
+
+/* 🟢 The Inverted White Box for Player 1 */
+.p1-input.inverted {
+    background: #fff !important;
+    color: #000 !important;
+    border-color: #fff !important;
+}
