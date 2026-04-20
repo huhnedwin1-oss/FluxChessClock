@@ -10,6 +10,9 @@ const introAnimation = lottie.loadAnimation({
     }
 });
 
+// Add this exact line right below your animation setup!
+introAnimation.setSpeed(0.75);
+
 // 🟢 Wait exactly 3 seconds, then trigger the fade-in
 setTimeout(() => {
     document.getElementById('preset-grid').classList.add('visible');
