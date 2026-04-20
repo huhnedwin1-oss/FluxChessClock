@@ -16,7 +16,7 @@ introAnimation.setSpeed(0.75);
 // 🟢 Wait exactly 3 seconds, then trigger the fade-in
 setTimeout(() => {
     document.getElementById('preset-grid').classList.add('visible');
-}, 4000);
+}, 5300);
 
 // 🟢 THE MAGIC SYNC: Perfectly matches your HTML grid to the Lottie scale
 function syncGridScale() {
