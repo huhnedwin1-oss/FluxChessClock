@@ -59,7 +59,11 @@ body, html {
     transition: color 0.4s ease-out, opacity 0.4s ease-out; 
     background: transparent; 
 }
-
+/* 🟢 THE TIMEOUT STATE (Red Text) */
+.clock-side.timeout {
+    color: #ff3333 !important; /* A nice bright red */
+    opacity: 1 !important;
+}
 .active { 
     /* 🟢 THE ACTIVE STATE (White Text) */
     color: #ffffff; 

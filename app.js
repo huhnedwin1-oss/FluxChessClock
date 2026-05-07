@@ -258,11 +258,25 @@ function formatTime(seconds) {
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
 }
-
 function updateDisplay() {
     p1Display.textContent = formatTime(time1);
     p2Display.textContent = formatTime(time2);
 
+    // 1. Check for Timeout (Turns the text red)
+    // We check "activePlayer !== 0" so it doesn't turn red on the main menu
+    if (time1 === 0 && activePlayer !== 0) {
+        p1Display.classList.add('timeout');
+    } else {
+        p1Display.classList.remove('timeout');
+    }
+
+    if (time2 === 0 && activePlayer !== 0) {
+        p2Display.classList.add('timeout');
+    } else {
+        p2Display.classList.remove('timeout');
+    }
+
+    // 2. Handle the Active State (White Text)
     if (activePlayer === 1) {
         p1Display.classList.add('active');
         p2Display.classList.remove('active');
