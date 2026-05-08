@@ -4,44 +4,29 @@ const introAnimation = lottie.loadAnimation({
     renderer: 'svg',
     loop: false,     
     autoplay: true,  
-    path: 'opening.json', // 🟢 Fixed your file name!
+    path: 'opening.json',
     rendererSettings: {
         preserveAspectRatio: 'xMidYMid slice' 
     }
 });
 
-// Add this exact line right below your animation setup!
 introAnimation.setSpeed(0.75);
 
-// 🟢 Wait exactly 3 seconds, then trigger the fade-in
 setTimeout(() => {
     document.getElementById('preset-grid').classList.add('visible');
 }, 5300);
 
-// 🟢 THE MAGIC SYNC: Perfectly matches your HTML grid to the Lottie scale
 function syncGridScale() {
-    // If the animation isn't loaded yet, do nothing
     if (!introAnimation.animationData) return;
-    
-    // 1. Read the exact AE canvas size dynamically
     const aeWidth = introAnimation.animationData.w; 
     const aeHeight = introAnimation.animationData.h; 
-    
-    // 2. Get the phone's current screen size
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    
-    // 3. Replicate Lottie's "slice" math exactly
     const scaleFactor = Math.max(screenWidth / aeWidth, screenHeight / aeHeight);
-    
-    // 4. Apply the exact scale to the HTML grid while keeping it dead center
     document.getElementById('preset-grid').style.transform = `translate(-50%, -50%) scale(${scaleFactor})`;
 }
 
-// 🟢 Run this sync the exact millisecond the Lottie data loads!
 introAnimation.addEventListener('data_ready', syncGridScale);
-
-// 🟢 Re-sync instantly if the user resizes the window or rotates their phone
 window.addEventListener('resize', syncGridScale);
 
 // 2. Initialize the Fluid Background
@@ -51,9 +36,7 @@ const liquidAnim = lottie.loadAnimation({
     loop: false,
     autoplay: false, 
     path: 'data.json',
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
+    rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
 });
 
 // 3. Initialize the Interactive Buttons
@@ -63,10 +46,10 @@ const btnAnim = lottie.loadAnimation({
     loop: false,
     autoplay: false, 
     path: 'buttons2.json',
-    rendererSettings: {
-        preserveAspectRatio: 'xMidYMid slice'
-    }
+    rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
 });
+
+// VARIABLES
 let time1 = 0; 
 let time2 = 0;
 let increment1 = 0; 
@@ -78,6 +61,7 @@ let activePlayer = 0;
 let timerInterval;
 let wakeLock = null; 
 let isPaused = false;
+let isGameOver = false; // 🟢 THE MAGIC SWITCH
 let isSystemInitialized = false; 
 
 const p1Display = document.getElementById('player1');
@@ -85,7 +69,6 @@ const p2Display = document.getElementById('player2');
 const menuOverlay = document.getElementById('menu-overlay');
 const presetBtns = document.querySelectorAll('.preset-btn:not(#customBtn)');
 const customBtn = document.getElementById('customBtn');
-
 const centerControls = document.getElementById('center-controls');
 const pauseBtn = document.getElementById('pauseBtn');
 const playBtn = document.getElementById('playBtn');
@@ -127,7 +110,7 @@ presetBtns.forEach(btn => {
         time1 = mins * 60;
         time2 = mins * 60;
         increment1 = parseInt(btn.getAttribute('data-inc'));
-        increment2 = increment1; // Presets are symmetrical
+        increment2 = increment1; 
         delay1 = 0;            
         delay2 = 0;
         currentDelay = delay1; 
@@ -154,17 +137,14 @@ customBackBtn.addEventListener('click', () => {
     document.getElementById('preset-grid').style.display = 'grid'; 
 });
 
-// 🟢 THE TOGGLE ANIMATION
 asymToggle.addEventListener('change', (e) => {
     if (e.target.checked) {
-        // Turn ON Asymmetrical
         p1Inputs.forEach((input, index) => {
             input.classList.add('inverted');
             p2Inputs[index].style.display = 'block';
             p2Inputs[index].value = input.value; 
         });
     } else {
-        // Turn OFF Asymmetrical
         p1Inputs.forEach((input, index) => {
             input.classList.remove('inverted');
             p2Inputs[index].style.display = 'none';
@@ -172,13 +152,11 @@ asymToggle.addEventListener('change', (e) => {
     }
 });
 
-// 🟢 THE START BUTTON
 customStartBtn.addEventListener('click', () => {
     let t1 = parseInt(document.getElementById('custom-time-1').value) || 5;
     let i1 = parseInt(document.getElementById('custom-inc-1').value) || 0;
     let d1 = parseInt(document.getElementById('custom-delay-1').value) || 0;
-
-    let t2 = t1, i2 = i1, d2 = d1; // Default to symmetrical
+    let t2 = t1, i2 = i1, d2 = d1; 
 
     if (asymToggle.checked) {
         t2 = parseInt(document.getElementById('custom-time-2').value) || 5;
@@ -258,12 +236,11 @@ function formatTime(seconds) {
     const s = (seconds % 60).toString().padStart(2, '0');
     return `${m}:${s}`;
 }
+
 function updateDisplay() {
     p1Display.textContent = formatTime(time1);
     p2Display.textContent = formatTime(time2);
 
-    // 1. Check for Timeout (Turns the text red)
-    // We check "activePlayer !== 0" so it doesn't turn red on the main menu
     if (time1 === 0 && activePlayer !== 0) {
         p1Display.classList.add('timeout');
     } else {
@@ -276,7 +253,6 @@ function updateDisplay() {
         p2Display.classList.remove('timeout');
     }
 
-    // 2. Handle the Active State (White Text)
     if (activePlayer === 1) {
         p1Display.classList.add('active');
         p2Display.classList.remove('active');
@@ -285,77 +261,65 @@ function updateDisplay() {
         p1Display.classList.remove('active');
     }
 }
+
 // --- UPDATED ENGINE LOGIC ---
-
 function tick() {
-
     if (currentDelay > 0) {
-
         currentDelay--;
-
-        return;
-
+        return; 
     }
-
+    
     if (activePlayer === 1 && time1 > 0) time1--;
-
     else if (activePlayer === 2 && time2 > 0) time2--;
-
+    
     updateDisplay();
 
+    if (time1 === 0 || time2 === 0) {
+        isGameOver = true; 
+        clearInterval(timerInterval);
+    }
 }
 
-
-
 function switchPlayer(newPlayer) {
+    if (isGameOver) return;
 
     if (activePlayer !== newPlayer) {
         if (activePlayer === 1) time1 += increment1;
         else if (activePlayer === 2) time2 += increment2;
 
-
-
         activePlayer = newPlayer;
-
         if (activePlayer === 1) currentDelay = delay1;
-
         else if (activePlayer === 2) currentDelay = delay2;
-
-       
-
-        playThump();
-
+        
+        playThump(); 
         updateDisplay();
 
-
-
         const liquidContainer = document.getElementById('liquid-bg');
-
         liquidAnim.setDirection(1);
-
 
         if (activePlayer === 1) {
             liquidContainer.classList.remove('flipped');
             liquidContainer.classList.add('flipped');
-            liquidAnim.goToAndPlay(0, true);
+            liquidAnim.goToAndPlay(0, true); 
         } else if (activePlayer === 2) {
             liquidContainer.classList.add('flipped');
             liquidContainer.classList.remove('flipped');
-            liquidAnim.goToAndPlay(0, true);
+            liquidAnim.goToAndPlay(0, true); 
         }
     }
 }
 
-
 function handleOrientation(event) {
-    if (ispaused) return;
-    const tilt = event.beta;
-    if (tilt > 5) {
-        switchPlayer(2);
-    } else if (tilt < -5) {
-        switchPlayer(1);
-    }
+    if (isPaused) return; 
+    if (isGameOver) return;
 
+    const tilt = event.beta; 
+    
+    if (tilt > 5) {
+        switchPlayer(2); 
+    } else if (tilt < -5) {
+        switchPlayer(1); 
+    }
 }
 
 async function enableWakeLockAndFullscreen() {
@@ -376,6 +340,7 @@ function startGame() {
     centerControls.style.display = 'flex';
     activePlayer = 1; 
     currentDelay = delay1; 
+    isGameOver = false; 
     updateDisplay();
     timerInterval = setInterval(tick, 1000);
 }
