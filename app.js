@@ -285,53 +285,77 @@ function updateDisplay() {
         p1Display.classList.remove('active');
     }
 }
-
 // --- UPDATED ENGINE LOGIC ---
+
 function tick() {
+
     if (currentDelay > 0) {
+
         currentDelay--;
-        return; 
+
+        return;
+
     }
+
     if (activePlayer === 1 && time1 > 0) time1--;
+
     else if (activePlayer === 2 && time2 > 0) time2--;
+
     updateDisplay();
+
 }
 
+
+
 function switchPlayer(newPlayer) {
+
     if (activePlayer !== newPlayer) {
         if (activePlayer === 1) time1 += increment1;
         else if (activePlayer === 2) time2 += increment2;
 
+
+
         activePlayer = newPlayer;
+
         if (activePlayer === 1) currentDelay = delay1;
+
         else if (activePlayer === 2) currentDelay = delay2;
-        
-        playThump(); 
+
+       
+
+        playThump();
+
         updateDisplay();
 
+
+
         const liquidContainer = document.getElementById('liquid-bg');
+
         liquidAnim.setDirection(1);
+
 
         if (activePlayer === 1) {
             liquidContainer.classList.remove('flipped');
             liquidContainer.classList.add('flipped');
-            liquidAnim.goToAndPlay(0, true); 
+            liquidAnim.goToAndPlay(0, true);
         } else if (activePlayer === 2) {
             liquidContainer.classList.add('flipped');
             liquidContainer.classList.remove('flipped');
-            liquidAnim.goToAndPlay(0, true); 
+            liquidAnim.goToAndPlay(0, true);
         }
     }
 }
 
+
 function handleOrientation(event) {
-    if (isPaused) return; 
-    const tilt = event.beta; 
+    if (ispaused) return;
+    const tilt = event.beta;
     if (tilt > 5) {
-        switchPlayer(2); 
+        switchPlayer(2);
     } else if (tilt < -5) {
-        switchPlayer(1); 
+        switchPlayer(1);
     }
+
 }
 
 async function enableWakeLockAndFullscreen() {
