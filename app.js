@@ -274,9 +274,11 @@ function tick() {
     
     updateDisplay();
 
+    // 🛑 STOP TIMER: Kill the clock when it hits zero and FLASH!
     if (time1 === 0 || time2 === 0) {
         isGameOver = true; 
         clearInterval(timerInterval);
+        document.body.classList.add('flash-bg'); // 🟢 TRIGGERS THE FLASH
     }
 }
 
@@ -341,6 +343,7 @@ function startGame() {
     activePlayer = 1; 
     currentDelay = delay1; 
     isGameOver = false; 
+    document.body.classList.remove('flash-bg'); // 🟢 CLEARS THE FLASH FOR THE NEW GAME
     updateDisplay();
     timerInterval = setInterval(tick, 1000);
 }
