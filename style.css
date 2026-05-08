@@ -59,9 +59,9 @@ body, html {
     transition: color 0.4s ease-out, opacity 0.4s ease-out; 
     background: transparent; 
 }
-/* 🟢 THE TIMEOUT STATE (Red Text) */
+/* 🟢 THE TIMEOUT STATE (Orange Text) */
 .clock-side.timeout {
-    color: #ff3333 !important; /* A nice bright red */
+    color: #FB7F33 !important; /* Matches your liquid background exactly! */
     opacity: 1 !important;
 }
 .active { 
